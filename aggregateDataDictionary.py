@@ -22,7 +22,6 @@ def getTableFromExcel(fileName, sheetName):
 
 #put all of these into a dictionary    
 def getAllTablesFromExcel(fileName, sheetNames):
-    #we want to do this with a map and a lambda function
     listOfDFs=[getTableFromExcel(fileName, sheetName) for sheetName in sheetNames]
     dictionaryOfDFs=dict(zip(sheetNames, listOfDFs))
     return(dictionaryOfDFs)
@@ -65,8 +64,9 @@ def aggregateColumnsForCleanDF(allDF):
     columnsWeWant=list(allDF.columns)
     columnsWeWant.remove("#")
     columnsWeWant.remove('indexColumn')
-    for column in columnsWeWant:
-        newDF[column]=takeColumnsGroupByGetText(allDF[['indexColumn',column]])
+    mySerieses=[takeColumnsGroupByGetText(allDF[['indexColumn',column]])for column in columnsWeWant]
+    newDF = pd.concat(mySerieses, axis=1, keys=allDF['indexColumn'].unique())
+    newDF.columns=columnsWeWant
     return(newDF)
 
 def takeFileNameOutPutFinalDF(fileName):    
