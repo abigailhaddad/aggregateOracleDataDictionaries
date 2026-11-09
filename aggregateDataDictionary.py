@@ -29,7 +29,7 @@ def getAllTablesFromExcel(fileName, sheetNames):
 # do cleaning within each table
 def cleanADataFrame(tabName, myDF):
     # forward fill the #
-    myDF['#']=myDF['#'].fillna(method='ffill')
+    myDF['#']=myDF['#'].ffill()
     #put in the tab name
     myDF['tabName']=tabName
     return(myDF)
@@ -65,7 +65,7 @@ def aggregateColumnsForCleanDF(allDF):
     columnsWeWant.remove("#")
     columnsWeWant.remove('indexColumn')
     mySerieses=[takeColumnsGroupByGetText(allDF[['indexColumn',column]])for column in columnsWeWant]
-    newDF = pd.concat(mySerieses, axis=1, keys=allDF['indexColumn'].unique())
+    newDF = pd.concat(mySerieses, axis=1)
     newDF.columns=columnsWeWant
     return(newDF)
 
